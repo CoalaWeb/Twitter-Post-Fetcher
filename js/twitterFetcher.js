@@ -281,6 +281,29 @@
       var n = 0;
       if (dataOnly) {
         while (n < x) {
+            //Added to allow formating of the data only date
+            if (typeof (formatterFunction) !== 'string') {
+                var datetimeText = times[n].getAttribute('datetime');
+                var newDate = new Date(times[n].getAttribute('datetime')
+                        .replace(/-/g, '/').replace('T', ' ').split('+')[0]);
+                var dateString = formatterFunction(newDate, datetimeText);
+                times[n].setAttribute('aria-label', dateString);
+
+                if (tweets[n].textContent) {
+                    // IE hack.
+                    if (supportsClassName) {
+                        times[n].textContent = dateString;
+                    } else {
+                        var h = document.createElement('p');
+                        var t = document.createTextNode(dateString);
+                        h.appendChild(t);
+                        h.setAttribute('aria-label', dateString);
+                        times[n] = h;
+                    }
+                } else {
+                    times[n].textContent = dateString;
+                }
+            }
           arrayTweets.push({
             tweet: tweets[n].innerHTML,
             author: authors[n].innerHTML,

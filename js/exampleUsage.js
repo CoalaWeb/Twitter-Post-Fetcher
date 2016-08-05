@@ -110,6 +110,36 @@ var configLikes = {
 };
 twitterFetcher.fetch(configLikes);
 
+var dataWithDate = {
+      "profile": {"screenName": 'jason_mayes'},
+      "dataOnly": true,
+      "dateFunction": customDate,
+      "maxTweets": 5,
+      "customCallback": populateWithDate
+};
+
+function customDate(date) {
+    var options = {weekday: "short", year: "numeric", month: "short", day: "numeric"};
+    return date.toLocaleDateString("en-GB", options);
+}
+
+twitterFetcher.fetch(dataWithDate);
+
+function populateWithDate(tweets){
+  var element = document.getElementById('example9');
+  var html = '<ul>';
+  for (var i = 0, lgth = tweets.length; i < lgth ; i++) {
+    var tweetObject = tweets[i];
+    html += '<li>'
+      + (tweetObject.image ? '<div class="tweet-img"><img src="'+tweetObject.image+'" /></div>' : '')
+      + '<p class="tweet-infos">Posted ' + tweetObject.time + '</p>'
+      + '<p class="tweet-content">' + tweetObject.tweet + '</p>'
+      + '<p class="tweet-link"><a href="' + tweetObject.permalinkURL + '">Link</a></p>'
+    + '</li>';
+  }
+  html += '</ul>';
+  element.innerHTML = html;
+}
 
 /**************************************************************************
  * NOTE: Only use the below examples if you still have a widget ID to use.
